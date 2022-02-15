@@ -2,10 +2,18 @@
 
 public class StatusController : ControllerBase
 {
+    private readonly ILookupOnCallDevs _onCallDevLookup;
+
+    public StatusController(ILookupOnCallDevs onCallDevLookup)
+    {
+        _onCallDevLookup = onCallDevLookup;
+    }
+
     [HttpGet("status/oncalldev")]
 
-    public ActionResult GetOnCallDev()
+    public async Task<ActionResult<GetCurrentDevModel>> GetOnCallDev()
     {
-        return Ok(); // this returns a 200 status response
+        GetCurrentDevModel resp = await _onCallDevLookup.GetCurrentOnCallDevAsync();
+        return Ok(resp); // this returns a 200 status response
     }
 }
